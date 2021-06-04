@@ -1,7 +1,10 @@
 {
   "name": "with-chakra-ui-typescript",
+  "homepage": "https://0bermensch.github.io/react-pages",
   "version": "1.0.0",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "next",
     "build": "next build",
     "start": "next start",
@@ -33,6 +36,7 @@
     "@types/node": "^14.6.0",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "gh-pages": "^3.2.0",
     "typescript": "4.2.3"
   },
   "license": "MIT"

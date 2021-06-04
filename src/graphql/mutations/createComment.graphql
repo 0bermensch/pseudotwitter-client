@@ -1,0 +1,3 @@
+mutation CreateComment($tweetId: Int!, $comment: String!) {
+  createComment(tweetId: $tweetId, comment: $comment)
+}

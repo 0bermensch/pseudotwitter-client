@@ -12,6 +12,7 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import { EditDeleteTweetButtons } from "../components/EditDeleteTweetButtons";
 import { Layout } from "../components/Layout";
+import { NavBar } from "../components/NavBar";
 import { useTweetsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
@@ -28,13 +29,18 @@ const Index = () => {
   if (!fetching && !data) {
     return (
       //logging the error message
-      <div>
-        <div>you got query failed</div>
-        //
-        <div>{error?.message}</div>
-      </div>
+      <>
+        <NavBar />
+
+        <div>
+          <div>you got query failed, something wrong with server</div>
+
+          <div>{error?.message}</div>
+        </div>
+      </>
     );
   }
+
   return (
     <Layout>
       {!data && fetching ? (

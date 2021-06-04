@@ -61,7 +61,7 @@ export const EditTweet = ({}) => {
               mt={4}
               type="submit"
               isLoading={isSubmitting}
-              colorScheme="teal"
+              colorScheme="gray"
             >
               update tweet
             </Button>

@@ -5,9 +5,28 @@ query Tweet($id: Int!) {
     updatedAt
     title
     text
+    commentCount
     creator {
       id
       username
+    }
+    comments {
+      id
+      comment
+      createdAt
+      user {
+        id
+        username
+      }
+      childComments {
+        id
+        comment
+        createdAt
+        user {
+          id
+          username
+        }
+      }
     }
   }
 }

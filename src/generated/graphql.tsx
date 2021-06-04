@@ -14,6 +14,19 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Int'];
+  comment: Scalars['String'];
+  userId: Scalars['Int'];
+  tweetId: Scalars['Float'];
+  user: User;
+  parentCommentId?: Maybe<Scalars['Int']>;
+  childComments?: Maybe<Array<Comment>>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -28,6 +41,7 @@ export type Mutation = {
   createTweet: Tweet;
   updateTweet?: Maybe<Tweet>;
   deleteTweet: Scalars['Boolean'];
+  createComment: Scalars['Boolean'];
 };
 
 
@@ -56,6 +70,12 @@ export type MutationUpdateTweetArgs = {
 
 export type MutationDeleteTweetArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  tweetId: Scalars['Int'];
+  comment: Scalars['String'];
 };
 
 export type PaginatedTweets = {
@@ -87,8 +107,10 @@ export type Tweet = {
   id: Scalars['Float'];
   title: Scalars['String'];
   text: Scalars['String'];
+  commentCount: Scalars['Int'];
   creatorId: Scalars['Float'];
   creator: User;
+  comments: Array<Comment>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -161,6 +183,17 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CreateCommentMutationVariables = Exact<{
+  tweetId: Scalars['Int'];
+  comment: Scalars['String'];
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createComment'>
+);
+
 export type CreateTweetMutationVariables = Exact<{
   input: TweetInput;
 }>;
@@ -217,7 +250,7 @@ export type UpdateTweetMutation = (
   { __typename?: 'Mutation' }
   & { updateTweet?: Maybe<(
     { __typename?: 'Tweet' }
-    & Pick<Tweet, 'id' | 'title' | 'text'>
+    & Pick<Tweet, 'id' | 'title' | 'text' | 'textSnippet'>
   )> }
 );
 
@@ -241,11 +274,25 @@ export type TweetQuery = (
   { __typename?: 'Query' }
   & { tweet?: Maybe<(
     { __typename?: 'Tweet' }
-    & Pick<Tweet, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text'>
+    & Pick<Tweet, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'commentCount'>
     & { creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
-    ) }
+    ), comments: Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'comment' | 'createdAt'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      ), childComments?: Maybe<Array<(
+        { __typename?: 'Comment' }
+        & Pick<Comment, 'id' | 'comment' | 'createdAt'>
+        & { user: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'username'>
+        ) }
+      )>> }
+    )> }
   )> }
 );
 
@@ -314,6 +361,15 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const CreateCommentDocument = gql`
+    mutation CreateComment($tweetId: Int!, $comment: String!) {
+  createComment(tweetId: $tweetId, comment: $comment)
+}
+    `;
+
+export function useCreateCommentMutation() {
+  return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
+};
 export const CreateTweetDocument = gql`
     mutation CreateTweet($input: TweetInput!) {
   createTweet(input: $input) {
@@ -365,6 +421,7 @@ export const UpdateTweetDocument = gql`
     id
     title
     text
+    textSnippet
   }
 }
     `;
@@ -391,9 +448,28 @@ export const TweetDocument = gql`
     updatedAt
     title
     text
+    commentCount
     creator {
       id
       username
+    }
+    comments {
+      id
+      comment
+      createdAt
+      user {
+        id
+        username
+      }
+      childComments {
+        id
+        comment
+        createdAt
+        user {
+          id
+          username
+        }
+      }
     }
   }
 }

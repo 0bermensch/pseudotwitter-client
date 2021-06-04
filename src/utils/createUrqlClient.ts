@@ -1,4 +1,5 @@
-import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
+import { Cache, cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import Router from "next/router";
 import {
   dedupExchange,
   Exchange,
@@ -15,8 +16,6 @@ import {
   RegisterMutation,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import Router from "next/router";
-import { gql, ssrExchange } from "@urql/core";
 import { isServer } from "./isServer";
 
 // this
@@ -110,6 +109,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
             },
             createPost: (_result, args, cache) => {
               invalidateAllTweets(cache);
+              args;
             },
             logout: (_result, args, cache) => {
               betterUpdateQuery<LogoutMutation, MeQuery>(
@@ -118,6 +118,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 _result,
                 () => ({ me: null })
               );
+              args;
             },
             login: (_result, args, cache) => {
               betterUpdateQuery<LoginMutation, MeQuery>(
@@ -134,6 +135,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   }
                 }
               );
+              args;
               invalidateAllTweets(cache);
             },
             register: (_result, args, cache) => {
@@ -151,6 +153,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   }
                 }
               );
+              args;
             },
           },
         },

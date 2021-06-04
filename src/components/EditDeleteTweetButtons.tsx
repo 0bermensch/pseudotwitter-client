@@ -25,7 +25,7 @@ export const EditDeleteTweetButtons: React.FC<EditDeleteTweetButtonsProps> = ({
 
   return (
     <Box>
-      <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
+      <NextLink href="/tweet/edit/[id]" as={`/tweet/edit/${id}`}>
         <IconButton
           as={Link}
           mr={4}

@@ -3,5 +3,6 @@ mutation UpdateTweet($id: Int!, $title: String!, $text: String!) {
     id
     title
     text
+    textSnippet
   }
 }
