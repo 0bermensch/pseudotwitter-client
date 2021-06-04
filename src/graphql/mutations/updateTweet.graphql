@@ -1,0 +1,7 @@
+mutation UpdateTweet($id: Int!, $title: String!, $text: String!) {
+  updateTweet(id: $id, title: $title, text: $text) {
+    id
+    title
+    text
+  }
+}

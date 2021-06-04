@@ -1,0 +1,11 @@
+fragment TweetSnippet on Tweet {
+  id
+  createdAt
+  updatedAt
+  title
+  textSnippet
+  creator {
+    id
+    username
+  }
+}

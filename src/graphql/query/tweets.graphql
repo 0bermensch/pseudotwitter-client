@@ -1,0 +1,8 @@
+query Tweets($limit: Int!, $cursor: String) {
+  tweets(cursor: $cursor, limit: $limit) {
+    hasMore
+    tweets {
+      ...TweetSnippet
+    }
+  }
+}

@@ -1,0 +1,3 @@
+mutation DeleteTweet($id: Int!) {
+  deleteTweet(id: $id)
+}
